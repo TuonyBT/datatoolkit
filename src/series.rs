@@ -86,11 +86,11 @@ impl<T: Ord + Clone,U: PartialOrd + Clone> Series<T,U> {
 
     /// Get range from start to end inclusive
     pub fn range(&self, start: i32, end: i32) -> Vec<DataPoint<T,U>> {
-        let is : usize = if start >= 0 { start as usize } else { self.data.len() + start as usize };
-        let ie : usize = if end >= 0 { end as usize } else { self.data.len() + end as usize };
+        let is : usize = if start >= 0 { start as usize } else { self.data.len() - start.abs() as usize };
+        let ie : usize = if end >= 0 { end as usize } else { self.data.len() - end.abs() as usize };
         let mut res : Vec<DataPoint<T,U>> = Vec::new();
         for i in is..=ie {
-            res.push( self[i as i32].clone() )
+            res.push( self[i].clone() )
         }
         res
     }
@@ -144,6 +144,14 @@ impl<T,U> Index<i32> for Series<T,U> {
         }
     }
 }
+
+impl<T,U> Index<usize> for Series<T,U> {
+    type Output = DataPoint<T,U>;
+    fn index<'a>(&'a self, index: usize) -> &'a DataPoint<T,U> {
+        &self.data[index]
+    }
+}
+
 
 impl<T: Clone,U: Clone> Iterator for Series<T,U> {
     type Item = DataPoint<T,U>;
