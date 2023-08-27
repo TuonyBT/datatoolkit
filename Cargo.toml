@@ -11,6 +11,10 @@ prettytable-rs = "0.8"
 rayon = "1.5"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-
-[dev-dependencies]
 chrono = { version = "0.4", features = ["serde"] }
+itertools = "0.10"
+ndarray = "0.15.6"
+ndarray-stats = "0.5.1"
+noisy_float = "0.2.0"
+poloto = "15.2.0"
+csv = "1.1.6"

@@ -140,6 +140,12 @@ impl FlexTable {
         &self.labels
     }
 
+    // I want to pull out the data so I can concatenate tables
+
+    pub fn get_data(&self) -> &Vec<FlexDataVector> {
+        &self.data
+    }
+
     pub fn get_datatypes(&self) -> &Vec<FlexDataType> {
         &self.datatypes
     }
@@ -345,6 +351,7 @@ impl FlexTable {
         let mut thread_handles : Vec<_> = Vec::new();
 
         let series = table.extract_series( &[label] );
+
         if series.len() == 1 {
             // Define value set
             let mut value_set : HashMap<String, Vec<FlexIndex>> = HashMap::new();
@@ -352,11 +359,19 @@ impl FlexTable {
                 let fdp = series[0][k].clone();
                 let val : String = String::try_from( &convert(fdp.get_data(), &FlexDataType::Str) )
                     .expect("Value not convertible to String");
-                if let Some( v ) = value_set.get_mut( &val ) {
-                    v.push( fdp.get_index().clone() );
-                } else {
-                    value_set.insert( val, Vec::<FlexIndex>::new() );
-                }
+
+                // I think this is trying to create a default dictionary but it is missing out the first entry
+                // Corrected below...
+             //   if let Some( v ) = value_set.get_mut( &val ) {
+             //       v.push( fdp.get_index().clone() );
+             //   } else {
+             //       let mut initial = Vec::<FlexIndex>::new(); // Sets up values for new key as before
+             //       initial.push( fdp.get_index().clone() );  // But now adds the first value which was omitted before
+             //       value_set.insert( val, initial );
+             //   }
+                // ... but this is neater anyway
+
+                value_set.entry(val).or_insert(Vec::<FlexIndex>::new()).push( fdp.get_index().clone() );
             }
 
             // Build subsets

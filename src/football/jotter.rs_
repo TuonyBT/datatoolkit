@@ -1,0 +1,34 @@
+// compares records in two files by unique key
+
+
+    let mut master_key_set = BTreeSet::<(u32, String)>::new();
+    let mut test_key_set = BTreeSet::<(u32, String)>::new();
+
+    let master_keys = new_master_table.extract_series(&["Date_chron", "HomeTeam"]);
+    let key_dates = master_keys[0].get_data().iter().map(|&z| u32::try_from(z).unwrap()).collect::<Vec<u32>>();
+    let key_teams = master_keys[1].get_data().iter().map(|&z| String::try_from(z).unwrap()).collect::<Vec<String>>();
+    for (d, t) in key_dates.iter().zip(key_teams) {
+        master_key_set.insert((*d, t));
+    }
+
+    let master_keys = new_test_table.extract_series(&["Date_chron", "HomeTeam"]);
+    let key_dates = master_keys[0].get_data().iter().map(|&z| u32::try_from(z).unwrap()).collect::<Vec<u32>>();
+    let key_teams = master_keys[1].get_data().iter().map(|&z| String::try_from(z).unwrap()).collect::<Vec<String>>();
+    for (d, t) in key_dates.iter().zip(key_teams) {
+        test_key_set.insert((*d, t));
+    }
+
+    let intersection: Vec<_> = test_key_set.intersection(&master_key_set).cloned().collect();
+
+
+    println!("Master Keys {:?}", master_key_set.len());
+    println!("Test Keys {:?}", test_key_set.len());
+    println!("Test Keys in master {:?}", intersection.len());
+
+
+
+// deleted from main temporarily
+//
+
+
+

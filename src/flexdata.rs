@@ -3,7 +3,8 @@ use std::convert::TryFrom;
 use std::iter::Sum;
 use crate::helper::derive_datatype;
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
+// TBT: added Eq and Hash to the derive statement so that I can build a HashSet from FlexDataTypes
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Eq, Hash)]
 pub enum FlexDataType {
     Str,
     Uint,
