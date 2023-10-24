@@ -351,7 +351,12 @@ impl FlexTable {
         let mut thread_handles : Vec<_> = Vec::new();
 
         let series = table.extract_series( &[label] );
+<<<<<<< HEAD
 
+=======
+        println!("series: {:?}", series);
+        
+>>>>>>> 79e2efb125c04ddf40f002c695eb76e3a48f1b31
         if series.len() == 1 {
             // Define value set
             let mut value_set : HashMap<String, Vec<FlexIndex>> = HashMap::new();
